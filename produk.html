@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produk Kami - EcoShop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="artikel.html">Artikel</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+          <li><a href="keranjang.html">Keranjang</a></li>
+          <li><a href="akun.html">Akun Saya</a></li>
+        </ul>
+      </nav>
+      <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+    </header>
+
+    <main class="produk">
+      <h2>Produk Kami</h2>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Cari produk..." />
+      </div>
+
+      <div class="produk-list" id="produkList">
+        <div class="item" data-nama="Buku Catatan Kertas Daur Ulang">
+          <a href="produk1.html">
+            <img src="img/bukucatatan.webp" alt="Buku Catatan Kertas Daur Ulang" />
+            <h3>Buku Catatan Kertas Daur Ulang</h3>
+          </a>
+          <p>Rp. 12.000</p>
+          <button class="tambah-btn" data-nama="Buku Catatan Kertas Daur Ulang" data-harga="12000">
+            Tambahkan ke dalam keranjang!
+          </button>
+        </div>
+
+        <div class="item" data-nama="Sabun Organik">
+          <a href="produk2.html">
+            <img src="img/sabunorganik.jpeg" alt="Sabun Organik" />
+            <h3>Sabun Organik</h3>
+          </a>
+          <p>Rp. 18.000</p>
+          <button class="tambah-btn" data-nama="Sabun Organik" data-harga="18000">
+            Tambahkan ke dalam keranjang!
+          </button>
+        </div>
+
+        <div class="item" data-nama="Tas Belanja Kain">
+          <a href="produk3.html">
+            <img src="img/tasbelanjakain.jpeg" alt="Tas Belanja Kain" />
+            <h3>Tas Belanja Kain</h3>
+          </a>
+          <p>Rp. 25.000</p>
+          <button class="tambah-btn" data-nama="Tas Belanja Kain" data-harga="25000">
+            Tambahkan ke dalam keranjang!
+          </button>
+        </div>
+
+        <div class="item" data-nama="Botol Minum Stainless Steel">
+          <a href="produk4.html">
+            <img src="img/7ace805b68bb9b866f95eee70c4e1e1a.png" alt="Botol Minum Stainless Steel" />
+            <h3>Botol Minum Stainless Steel</h3>
+          </a>
+          <p>Rp. 55.000</p>
+          <button class="tambah-btn" data-nama="Botol Minum Stainless Steel" data-harga="55000">
+            Tambahkan ke dalam keranjang!
+          </button>
+        </div>
+
+        <div class="item" data-nama="Komposter">
+          <a href="produk5.html">
+            <img src="img/Komposter-3-scaled.webp" alt="Komposter" />
+            <h3>Komposter</h3>
+          </a>
+          <p>Rp. 68.000</p>
+          <button class="tambah-btn" data-nama="Komposter" data-harga="68000">
+            Tambahkan ke dalam keranjang!
+          </button>
+        </div>
+
+        <div class="item" data-nama="Lampu LED Tenaga Matahari">
+          <a href="produk6.html">
+            <img src="img/9f3dd8e64ebeedcccccc1b5b15ce5226.jpg" alt="Lampu LED Tenaga Matahari" />
+            <h3>Lampu LED Tenaga Matahari</h3>
+          </a>
+          <p>Rp. 70.000</p>
+          <button class="tambah-btn" data-nama="Lampu LED Tenaga Matahari" data-harga="70000">
+            Tambahkan ke dalam keranjang!
+          </button>
+        </div>
+
+        <div class="item" data-nama="Masker Kain">
+          <a href="produk7.html">
+            <img src="img/no_brand_masker_kain_scuba_dewasa_reusable_full01_htgti2j4.webp" alt="Masker Kain" />
+            <h3>Masker Kain</h3>
+          </a>
+          <p>Rp. 12.000</p>
+          <button class="tambah-btn" data-nama="Masker Kain" data-harga="12000">
+            Tambahkan ke dalam keranjang!
+          </button>
+        </div>
+
+        <div class="item" data-nama="Deterjen Eco-Friendly 1 Liter">
+          <a href="produk8.html">
+            <img src="img/image-97.jpeg" alt="Deterjen Eco-Friendly" />
+            <h3>Deterjen Eco-Friendly 1 Liter</h3>
+          </a>
+          <p>Rp. 100.000</p>
+          <button class="tambah-btn" data-nama="Deterjen Eco-Friendly 1 Liter" data-harga="100000">
+            Tambahkan ke dalam keranjang!
+          </button>
+        </div>
+
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari! 🌱</p>
+    </footer>
+
+    <script>
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navLinks = document.querySelectorAll("nav ul li a");
+  const allowed = ["index.html", "artikel.html", "akun.html", "produk.html", "kontak.html", "keranjang.html"];
+
+  // Gating akses jika belum login
+  if (!user) {
+    navLinks.forEach(link => {
+      const href = link.getAttribute("href");
+      if (!allowed.includes(href)) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          alert("Silakan login terlebih dahulu untuk mengakses halaman ini.");
+        });
+        link.style.opacity = "0.5";
+        link.style.pointerEvents = "none";
+        link.style.cursor = "not-allowed";
+      }
+    });
+  }
+
+  // Tampilkan "Halo, [nama]" dan Logout
+  const tombolAkunAtas = document.getElementById("tombol-akun-atas");
+  if (user && tombolAkunAtas) {
+    tombolAkunAtas.innerHTML = `
+      <span class="halo-user">Halo, ${user.nama}</span>
+
+      <a href="#" class="btn-akun" onclick="logout()">Logout</a>
+    `;
+  }
+
+  function logout() {
+    localStorage.removeItem("user");
+    alert("Logout berhasil!");
+    window.location.href = "index.html";
+  }
+
+  // Fitur keranjang
+  const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".tambah-btn").forEach(button => {
+      const nama = button.dataset.nama;
+
+      if (keranjang.some(item => item.nama === nama)) {
+        button.disabled = true;
+        button.textContent = "Sudah ditambahkan";
+      }
+
+      button.addEventListener("click", function () {
+        const harga = parseInt(button.dataset.harga);
+        keranjang.push({ nama, harga });
+        localStorage.setItem("keranjang", JSON.stringify(keranjang));
+
+        button.disabled = true;
+        button.textContent = "Sudah ditambahkan";
+      });
+    });
+
+    // Fitur pencarian
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", () => {
+        const keyword = searchInput.value.toLowerCase();
+        document.querySelectorAll(".item").forEach(item => {
+          const nama = item.dataset.nama.toLowerCase();
+          item.style.display = nama.includes(keyword) ? "block" : "none";
+        });
+      });
+    }
+  });
+</script>
+  </div>
+</body>
+</html>

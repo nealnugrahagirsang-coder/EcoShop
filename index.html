@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoShop! - Beranda</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loading-screen">
+  <img src="img/ECOSHOP.png" alt="EcoShop Logo" class="logo-loading" />
+  <p class="loading-text">LOADING…</p>
+  </div>
+
+  <!-- Navbar -->
+  <header>
+    <nav>
+      <ul id="menu-nav">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="produk.html">Produk</a></li>
+        <li><a href="artikel.html">Artikel</a></li>
+        <li><a href="kontak.html">Kontak</a></li>
+        <li><a href="keranjang.html">Keranjang</a></li>
+        <li><a href="akun.html">Akun Saya</a></li>
+        
+      </ul>
+    </nav>
+
+    <!-- Tombol Masuk/Daftar atau Halo/Logout -->
+    <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+  </header>
+
+  <!-- Konten Beranda -->
+  <main class="beranda">
+    <section class="hero">
+      <h1>Selamat Datang di EcoShop! 🌱</h1>
+      <p>Temukan produk hijau yang mendukung gaya hidup berkelanjutan 🌿</p>
+      <a href="produk.html" class="cta">Lihat Produk</a>
+      <p id="peringatan-produk" class="peringatan" style="display: none;">
+        Untuk dapat melihat produk, silakan masuk atau daftar terlebih dahulu.
+      </p>
+    </section>
+
+    <section class="highlight">
+      <div class="highlight-box">
+        <h3>🌞 Hemat Energi</h3>
+        <p>Gunakan produk yang mendukung efisiensi energi di rumah.</p>
+      </div>
+      <div class="highlight-box">
+        <h3>🚿 Kurangi Limbah</h3>
+        <p>Temukan solusi untuk mengurangi limbah plastik dan air.</p>
+      </div>
+      <div class="highlight-box">
+        <h3>🧺 Gaya Hidup Bersih</h3>
+        <p>Gunakan bahan alami untuk kebersihan rumah dan tubuh.</p>
+      </div>
+    </section>
+
+    <section class="galeri">
+      <h2>Inspirasi Eco Living</h2>
+      <div class="galeri-grid">
+        <img src="img/tanamanrumah.jpg" alt="Tanaman di rumah">
+        <img src="img/kamarmandialami.jpg" alt="Kamar mandi alami">
+        <img src="img/dapurminimplastik.webp" alt="Dapur minim plastik">
+        <img src="img/laundryramahling.webp" alt="Laundry ramah lingkungan">
+      </div>
+    </section>
+
+    <section class="tips">
+      <h2>Tips Hijau Hari Ini</h2>
+      <ul>
+        <li><strong>Gunakan ulang botol minum</strong> daripada membeli botol plastik baru.</li>
+        <li><strong>Matikan lampu</strong> saat tidak digunakan untuk hemat energi.</li>
+        <li><strong>Belanja secukupnya</strong> agar tidak ada makanan terbuang.</li>
+      </ul>
+    </section>
+
+    <section class="quote">
+      <blockquote>
+        “Bumi tidak butuh kita, tapi kita butuh bumi. Rawat dia mulai dari rumah.”
+      </blockquote>
+      <p class="quote-author">— EcoShop</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari! 🌱</p>
+  </footer>
+
+  <!-- Script Dinamis -->
+  <script>
+    window.addEventListener("load", () => {
+    const loading = document.getElementById("loading-screen");
+    if (loading) {
+      setTimeout(() => {
+        loading.style.opacity = "0";
+        setTimeout(() => {
+          loading.style.display = "none";
+        }, 500);
+      }, 1500); // durasi loading 1.5 detik
+    }
+  });
+
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const tombolAkunAtas = document.getElementById("tombol-akun-atas");
+
+    // Tombol Masuk/Daftar atau Halo/Logout
+    if (user) {
+      tombolAkunAtas.innerHTML = `
+        <span class="halo-user">Halo, ${user.nama}</span>
+        <a href="#" class="btn-akun" onclick="logout()">Logout</a>
+      `;
+    } else {
+      tombolAkunAtas.innerHTML = `
+        <a href="login.html" class="btn-akun">Masuk</a>
+        <a href="daftar.html" class="btn-akun">Daftar</a>
+      `;
+    }
+
+    function logout() {
+      localStorage.removeItem("user");
+      alert("Logout berhasil!");
+      window.location.href = "index.html";
+    }
+
+    // Gating navbar: hanya Beranda & Artikel aktif sebelum login
+    const navLinks = document.querySelectorAll("#menu-nav li a");
+    const allowed = ["index.html", "artikel.html"];
+    navLinks.forEach(link => {
+      const href = link.getAttribute("href");
+      if (!user && !allowed.includes(href)) {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+          alert("Silakan login terlebih dahulu untuk mengakses halaman ini.");
+        });
+        link.style.opacity = "0.5";
+        link.style.pointerEvents = "none";
+        link.style.cursor = "not-allowed";
+      }
+    });
+
+    // Gating tombol CTA "Lihat Produk"
+    const ctaProduk = document.querySelector(".cta");
+    const peringatanProduk = document.getElementById("peringatan-produk");
+    if (!user && ctaProduk) {
+      ctaProduk.addEventListener("click", function(e) {
+        e.preventDefault();
+        alert("Untuk melihat produk, silakan masuk atau daftar terlebih dahulu.");
+      });
+      ctaProduk.style.opacity = "0.5";
+      ctaProduk.style.pointerEvents = "none";
+      ctaProduk.style.cursor = "not-allowed";
+      if (peringatanProduk) {
+        peringatanProduk.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>

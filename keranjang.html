@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keranjang Belanja - EcoShop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav>
+        <ul id="menu-nav">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="artikel.html">Artikel</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+          <li><a href="keranjang.html">Keranjang</a></li>
+          <li><a href="akun.html">Akun Saya</a></li>
+        </ul>
+      </nav>
+      <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+    </header>
+
+    <main class="keranjang">
+      <h2>Keranjang Belanja</h2>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Cari produk di keranjang..." />
+      </div>
+
+      <form id="form-keranjang">
+        <div id="daftar-keranjang"></div>
+        <p id="jumlah-item">Jumlah item dipilih: 0</p>
+        <p id="total-harga">Total harga: Rp0</p>
+        <button type="submit" class="checkout-btn" disabled>Checkout Sekarang</button>
+        <button type="button" class="hapus-semua" onclick="hapusSemua()">Hapus Semua</button>
+      </form>
+    </main>
+
+    <footer>
+      <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari! 🌱</p>
+    </footer>
+
+    <script>
+      const user = JSON.parse(localStorage.getItem("user"));
+      const tombolAkunAtas = document.getElementById("tombol-akun-atas");
+
+      if (user) {
+        tombolAkunAtas.innerHTML = `
+          <span class="halo-user">Halo, ${user.nama}</span>
+          <a href="#" class="btn-akun" onclick="logout()">Logout</a>
+        `;
+      } else {
+        tombolAkunAtas.innerHTML = `
+          <a href="login.html" class="btn-akun">Masuk</a>
+          <a href="daftar.html" class="btn-akun">Daftar</a>
+        `;
+      }
+
+      function logout() {
+        localStorage.removeItem("user");
+        alert("Logout berhasil!");
+        window.location.href = "index.html";
+      }
+
+      const navLinks = document.querySelectorAll("#menu-nav li a");
+      const allowed = ["index.html", "artikel.html"];
+      navLinks.forEach(link => {
+        const href = link.getAttribute("href");
+        if (!user && !allowed.includes(href)) {
+          link.addEventListener("click", function(e) {
+            e.preventDefault();
+            alert("Silakan login terlebih dahulu untuk mengakses halaman ini.");
+          });
+          link.style.opacity = "0.5";
+          link.style.pointerEvents = "none";
+          link.style.cursor = "not-allowed";
+        }
+      });
+
+      let keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+
+      const daftar = document.getElementById("daftar-keranjang");
+      const jumlahEl = document.getElementById("jumlah-item");
+      const totalEl = document.getElementById("total-harga");
+      const checkoutBtn = document.querySelector(".checkout-btn");
+      const searchInput = document.getElementById("searchInput");
+
+      function getLink(nama) {
+        const map = {
+          "Buku Catatan Kertas Daur Ulang": "produk1.html",
+          "Sabun Organik": "produk2.html",
+          "Tas Belanja Kain": "produk3.html"
+        };
+        return map[nama] || "#";
+      }
+
+      function renderKeranjang(filter = "") {
+        daftar.innerHTML = "";
+
+        const filtered = keranjang.filter(item =>
+          item.nama.toLowerCase().includes(filter.toLowerCase())
+        );
+
+        if (filtered.length === 0) {
+          daftar.innerHTML = "<p>Tidak ada produk ditemukan 💔</p>";
+          jumlahEl.textContent = "Jumlah item dipilih: 0";
+          totalEl.textContent = "Total harga: Rp0";
+          checkoutBtn.disabled = true;
+          return;
+        }
+
+        filtered.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "item-keranjang";
+          div.innerHTML = `
+            <label>
+              <input type="checkbox" class="item-check" data-nama="${item.nama}" data-harga="${item.harga}" />
+              <a href="${getLink(item.nama)}">${item.nama}</a> - Rp${item.harga.toLocaleString()}
+            </label>
+          `;
+          daftar.appendChild(div);
+        });
+
+        document.querySelectorAll(".item-check").forEach(checkbox => {
+          checkbox.addEventListener("change", updateTotal);
+        });
+
+        updateTotal();
+      }
+
+      function updateTotal() {
+        const checks = document.querySelectorAll(".item-check");
+        let total = 0;
+        let jumlah = 0;
+
+        checks.forEach(check => {
+          if (check.checked) {
+            total += parseInt(check.dataset.harga);
+            jumlah++;
+          }
+        });
+
+        jumlahEl.textContent = `Jumlah item dipilih: ${jumlah}`;
+        totalEl.textContent = `Total harga: Rp${total.toLocaleString()}`;
+        checkoutBtn.disabled = jumlah === 0;
+      }
+
+      function hapusSemua() {
+        localStorage.removeItem("keranjang");
+        keranjang = [];
+        renderKeranjang();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        renderKeranjang();
+
+        document.getElementById("form-keranjang").addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const selectedItems = [];
+          document.querySelectorAll(".item-check").forEach(check => {
+            if (check.checked) {
+              const nama = check.dataset.nama;
+              const harga = parseInt(check.dataset.harga);
+              selectedItems.push({ nama, harga });
+            }
+          });
+
+          if (selectedItems.length === 0) {
+            alert("Pilih produk terlebih dahulu sebelum checkout.");
+            return;
+          }
+
+          localStorage.setItem("checkoutItems", JSON.stringify(selectedItems));
+          window.location.href = "checkout.html";
+        });
+
+        searchInput.addEventListener("input", () => {
+          renderKeranjang(searchInput.value);
+        });
+      });
+    </script>
+  </div>
+</body>
+</html>

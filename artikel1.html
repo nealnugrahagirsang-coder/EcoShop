@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sampah Plastik - EcoShop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Navbar -->
+    <header>
+      <nav>
+        <ul id="menu-nav">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="artikel.html">Artikel</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+          <li><a href="keranjang.html">Keranjang</a></li>
+          <li><a href="akun.html">Akun Saya</a></li>
+        </ul>
+      </nav>
+      <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+    </header>
+
+    <!-- Konten Artikel -->
+    <main>
+      <article class="isi-artikel">
+        <h1>Sampah Plastik</h1>
+        <p>Sampah plastik merupakan salah satu masalah lingkungan terbesar di dunia saat ini.
+          Plastik ini sering kali digunakan dalam kehidupan sehari-hari. Contohnya adalah botol minuman,
+          kemasan makanan, hingga tas belanja. Plastik memang sangat praktis untuk digunakan,
+          sehingga penggunaannya meningkat dengan sangat pesat. Namun, plastik ini sangat sulit terurai secara alami.
+          Beberapa jenis plastik membutuhkan waktu ratusan tahun untuk dapat terurai secara alami.</p>
+
+        <p>Sampah plastik banyak menimbulkan dampak negatif di daratan maupun di laut.
+          Di darat, sampah plastik bisa menyumbat saluran air sehingga dapat memicu banjir,
+          dan juga merusak keindahan lingkungan sekitar. Di laut, sampah plastik bisa menjadi ancaman bagi kehidupan laut.
+          Hewan seperti penyu seringkali menganggap bahwa plastik adalah makanannya karena terlihat mirip seperti ubur-ubur,
+          sehingga dapat menyebabkan cedera bahkan kematian. Selain itu, plastik yang terurai menjadi partikel mikroplastik
+          bisa masuk ke rantai makanan manusia melalui konsumsi ikan dan makanan laut lainnya.</p>
+
+        <p>Untuk mengurangi masalah ini, diperlukan kesadaran dan tindakan bersama. Beberapa tindakan yang dapat dilakukan antara lain:</p>
+        <ol>
+          <li>Mengurangi penggunaan plastik sekali pakai, seperti tas belanja dan botol minuman</li>
+          <li>Memanfaatkan tas belanja, botol, atau wadah yang dapat digunakan berulang-ulang</li>
+          <li>Mendaur ulang sampah plastik yang masih bisa diproses menjadi bahan baru</li>
+        </ol>
+
+        <p class="penutup">Kesadaran individu dan kolektif sangat penting. Jika tidak ada tindakan nyata,
+          sampah plastik akan terus menumpuk dan membahayakan bumi serta kehidupan generasi mendatang.
+          Dengan menerapkan kebiasaan ramah lingkungan dan mengedukasi masyarakat,
+          kita dapat mengurangi dampak buruk plastik dan menjaga lingkungan tetap bersih dan sehat.</p>
+      </article>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari! 🌱</p>
+    </footer>
+  </div>
+
+  <!-- Script Dinamis -->
+  <script>
+    const user = JSON.parse(localStorage.getItem("user"));
+    const tombolAkunAtas = document.getElementById("tombol-akun-atas");
+
+    if (user) {
+      tombolAkunAtas.innerHTML = `
+        <span class="halo-user">Halo, ${user.nama}</span>
+        <a href="#" class="btn-akun" onclick="logout()">Logout</a>
+      `;
+    } else {
+      tombolAkunAtas.innerHTML = `
+        <a href="login.html" class="btn-akun">Masuk</a>
+        <a href="daftar.html" class="btn-akun">Daftar</a>
+      `;
+    }
+
+    function logout() {
+      localStorage.removeItem("user");
+      alert("Logout berhasil!");
+      window.location.href = "index.html";
+    }
+
+    const navLinks = document.querySelectorAll("#menu-nav li a");
+    const allowed = ["index.html", "artikel.html"];
+    navLinks.forEach(link => {
+      const href = link.getAttribute("href");
+      if (!user && !allowed.includes(href)) {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+          alert("Silakan login terlebih dahulu untuk mengakses halaman ini.");
+        });
+        link.style.opacity = "0.5";
+        link.style.pointerEvents = "none";
+        link.style.cursor = "not-allowed";
+      }
+    });
+  </script>
+</body>
+</html>

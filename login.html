@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - EcoShop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="form-wrapper">
+    <h1>Masuk ke EcoShop 🌱</h1>
+    <form id="form-login">
+      <label for="email">Email:</label>
+      <input type="email" id="email" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" required />
+
+      <button type="submit" class="btn-akun">Masuk</button>
+    </form>
+    <p>Belum punya akun? <a href="daftar.html">Daftar sekarang</a></p>
+  </div>
+
+  <script>
+    document.getElementById("form-login").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const emailInput = document.getElementById("email").value.trim().toLowerCase();
+      const passwordInput = document.getElementById("password").value;
+
+      const semuaAkun = JSON.parse(localStorage.getItem("semuaAkun")) || [];
+
+      const akunCocok = semuaAkun.find(
+        (akun) => akun.email === emailInput && akun.password === passwordInput
+      );
+
+      if (akunCocok) {
+        localStorage.setItem("user", JSON.stringify(akunCocok));
+        alert("Login berhasil!");
+        window.location.href = "index.html";
+      } else {
+        alert("Email atau password salah. Silakan coba lagi.");
+      }
+    });
+  </script>
+</body>
+</html>

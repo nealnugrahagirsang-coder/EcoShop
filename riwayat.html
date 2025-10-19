@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riwayat Pesanan - EcoShop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav>
+        <ul id="menu-nav">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="artikel.html">Artikel</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+          <li><a href="keranjang.html">Keranjang</a></li>
+          <li><a href="akun.html">Akun Saya</a></li>
+        </ul>
+      </nav>
+      <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+    </header>
+
+    <main>
+      <div class="form-wrapper">
+        <h2>Riwayat Pesanan</h2>
+        <div id="daftar-riwayat"></div>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari! 🌱</p>
+    </footer>
+
+    <script>
+      const user = JSON.parse(localStorage.getItem("user"));
+      const tombolAkunAtas = document.getElementById("tombol-akun-atas");
+
+      if (user) {
+        tombolAkunAtas.innerHTML = `
+          <span class="halo-user">Halo, ${user.nama}</span>
+          <a href="akun.html" class="btn-akun">Edit Profil</a>
+          <a href="#" class="btn-akun" onclick="logout()">Logout</a>
+        `;
+      } else {
+        alert("Silakan login terlebih dahulu.");
+        window.location.href = "login.html";
+      }
+
+      function logout() {
+        localStorage.removeItem("user");
+        alert("Logout berhasil!");
+        window.location.href = "index.html";
+      }
+
+      const daftar = document.getElementById("daftar-riwayat");
+      const riwayat = JSON.parse(localStorage.getItem("riwayatPesanan")) || [];
+
+      if (riwayat.length === 0) {
+        daftar.innerHTML = "<p>Belum ada pesanan 💔</p>";
+      } else {
+        riwayat.reverse().forEach(pesanan => {
+          const div = document.createElement("div");
+          div.className = "pesanan-box";
+          div.innerHTML = `
+            <p><strong>Waktu:</strong> ${pesanan.waktu}</p>
+            <p><strong>Nama:</strong> ${pesanan.nama}</p>
+            <p><strong>Alamat:</strong> ${pesanan.alamat}</p>
+            <p><strong>Telp:</strong> ${pesanan.telp}</p>
+            <p><strong>Metode:</strong> ${pesanan.metode}</p>
+            <p><strong>Produk:</strong></p>
+            <ul>${pesanan.items.map(item => `<li>${item.nama} - Rp${item.harga.toLocaleString()}</li>`).join("")}</ul>
+            <p><strong>Total:</strong> Rp${pesanan.total.toLocaleString()}</p>
+            <hr />
+          `;
+          daftar.appendChild(div);
+        });
+      }
+    </script>
+  </div>
+</body>
+</html>

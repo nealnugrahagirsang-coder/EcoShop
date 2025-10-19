@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>EcoShop! - Artikel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav>
+      <ul id="menu-nav">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="produk.html">Produk</a></li>
+        <li><a href="artikel.html">Artikel</a></li>
+        <li><a href="kontak.html">Kontak</a></li>
+        <li><a href="keranjang.html">Keranjang</a></li>
+        <li><a href="akun.html">Akun Saya</a></li>
+      </ul>
+    </nav>
+    <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+    </header>
+
+    <main>
+      <section class="artikel">
+        <h2>Artikel Pilihan</h2>
+        <article>
+          <h3><a href="artikel1.html">Sampah Plastik</a></h3>
+          <p>Sampah plastik merupakan  salah satu masalah lingkungan terbesar di dunia saat ini.</p>
+        </article>
+        <article>
+          <h3><a href="artikel2.html">Manfaat Menggunakan Produk Ramah Lingkungan</a></h3>
+          <p>Dalam era modern ini, kesadaran terhadap 
+            pentingnya menjaga kelestarian lingkungan semakin meningkat.</p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari!</p>
+    </footer>
+
+    <script>
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navLinks = document.querySelectorAll("nav ul li a");
+  const allowed = ["index.html", "artikel.html"];
+
+  navLinks.forEach(link => {
+    const href = link.getAttribute("href");
+    if (!user && !allowed.includes(href)) {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        alert("Silakan login terlebih dahulu untuk mengakses halaman ini.");
+      });
+      link.style.opacity = "0.5";
+      link.style.pointerEvents = "none";
+      link.style.cursor = "not-allowed";
+    }
+  });
+</script>
+  </div>
+</body>
+</html>

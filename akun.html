@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akun Saya - EcoShop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav>
+        <ul id="menu-nav">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="artikel.html">Artikel</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+          <li><a href="keranjang.html">Keranjang</a></li>
+          <li><a href="akun.html">Akun Saya</a></li>
+        </ul>
+      </nav>
+      <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+    </header>
+
+    <main>
+      <div class="form-wrapper">
+        <h2>Edit Profil</h2>
+        <form id="form-profil">
+          <label for="nama">Nama Lengkap</label>
+          <input type="text" id="nama" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" required />
+
+          <label for="alamat">Alamat</label>
+          <textarea id="alamat" rows="3" required></textarea>
+
+          <label for="telp">Nomor Telepon</label>
+          <input type="tel" id="telp" required />
+
+          <label for="password">Kata Sandi</label>
+          <input type="password" id="password" required />
+
+          <button type="submit">Simpan Perubahan</button>
+        </form>
+        <div class="form-link">
+        <a href="index.html">← Kembali ke Beranda</a><br>
+        <a href="riwayat.html">📦 Lihat Riwayat Pesanan</a>
+        </div>
+
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari! 🌱</p>
+    </footer>
+  </div>
+
+  <script>
+  const user = JSON.parse(localStorage.getItem("user"));
+  const tombolAkunAtas = document.getElementById("tombol-akun-atas");
+
+  // Tampilkan Halo dan Logout
+  if (user) {
+    tombolAkunAtas.innerHTML = `
+      <span class="halo-user">Halo, ${user.nama}</span>
+      <a href="#" class="btn-akun" onclick="logout()">Logout</a>
+    `;
+  } else {
+    alert("Silakan login terlebih dahulu.");
+    window.location.href = "login.html";
+  }
+
+  function logout() {
+    localStorage.removeItem("user");
+    alert("Logout berhasil!");
+    window.location.href = "index.html";
+  }
+
+  // Isi form dengan data user
+  document.getElementById("nama").value = user?.nama || "";
+  document.getElementById("email").value = user?.email || "";
+  document.getElementById("password").value = user?.password || "";
+  document.getElementById("alamat").value = user?.alamat || "";
+  document.getElementById("telp").value = user?.telp || "";
+
+  // Simpan perubahan
+  document.getElementById("form-profil").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const nama = document.getElementById("nama").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const alamat = document.getElementById("alamat").value.trim();
+    const telp = document.getElementById("telp").value.trim();
+
+    if (!nama || !email || !password || !alamat || !telp) {
+      alert("Semua kolom harus diisi!");
+      return;
+    }
+
+    const updatedUser = { nama, email, password, alamat, telp };
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+    alert("Profil berhasil diperbarui!");
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>EcoShop! - Kontak</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <!-- ✅ Tambahkan penampung Halo & Logout -->
+      <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+
+      <nav>
+        <ul id="menu-nav">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="artikel.html">Artikel</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+          <li><a href="keranjang.html">Keranjang</a></li>
+          <li><a href="akun.html">Akun Saya</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="kontak">
+        <h2>Hubungi Kami</h2>
+        <form>
+          <input type="text" placeholder="Nama"><br><br>
+          <input type="email" placeholder="Email"><br><br>
+          <input type="text" placeholder="Subjek"><br><br>
+          <textarea rows="5" placeholder="Pesan Anda..."></textarea><br><br>
+          <button type="submit" class="kirim">KIRIM</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari!</p>
+    </footer>
+
+    <!-- ✅ Script lengkap -->
+    <script>
+      const user = JSON.parse(localStorage.getItem("user"));
+      const navLinks = document.querySelectorAll("nav ul li a");
+      const allowed = ["index.html", "artikel.html", "kontak.html", "produk.html", "keranjang.html", "akun.html"];
+
+      // Gating akses jika belum login
+      if (!user) {
+        navLinks.forEach(link => {
+          const href = link.getAttribute("href");
+          if (!allowed.includes(href)) {
+            link.addEventListener("click", function(e) {
+              e.preventDefault();
+              alert("Silakan login terlebih dahulu untuk mengakses halaman ini.");
+            });
+            link.style.opacity = "0.5";
+            link.style.pointerEvents = "none";
+            link.style.cursor = "not-allowed";
+          }
+        });
+      }
+
+      // Tampilkan Halo dan Logout
+      const tombolAkunAtas = document.getElementById("tombol-akun-atas");
+      if (user && tombolAkunAtas) {
+        tombolAkunAtas.innerHTML = `
+          <span class="halo-user">Halo, ${user.nama}</span>
+          <a href="#" class="btn-akun" onclick="logout()">Logout</a>
+        `;
+      }
+
+      function logout() {
+        localStorage.removeItem("user");
+        alert("Logout berhasil!");
+        window.location.href = "index.html";
+      }
+    </script>
+  </div>
+</body>
+</html>

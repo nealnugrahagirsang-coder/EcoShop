@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - EcoShop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <div class="tombol-akun-atas" id="tombol-akun-atas"></div>
+      <nav>
+        <ul id="menu-nav">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="artikel.html">Artikel</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+          <li><a href="keranjang.html">Keranjang</a></li>
+          <li><a href="akun.html">Akun Saya</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <div class="form-wrapper">
+        <h2>Checkout</h2>
+        <form id="form-checkout">
+          <label for="nama">Nama Lengkap</label>
+          <input type="text" id="nama" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" required />
+
+          <label for="alamat">Alamat Pengiriman</label>
+          <textarea id="alamat" rows="3" required></textarea>
+
+          <label for="telp">Nomor Telepon</label>
+          <input type="tel" id="telp" required />
+
+          <label for="metode">Metode Pembayaran</label>
+          <select id="metode" required>
+            <option value="">-- Pilih Metode --</option>
+            <option value="COD">Bayar di Tempat (COD)</option>
+            <option value="Transfer">Transfer Bank</option>
+            <option value="E-Wallet">E-Wallet</option>
+          </select>
+
+          <h3>Ringkasan Pesanan</h3>
+          <ul id="ringkasan-pesanan"></ul>
+
+          <button type="submit">Bayar Sekarang</button>
+        </form>
+        <div class="form-link">
+          <a href="keranjang.html">← Kembali ke Keranjang</a>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 EcoShop | Hidup Sehat, Alam Lestari! 🌱</p>
+    </footer>
+
+    <script>
+      const user = JSON.parse(localStorage.getItem("user"));
+      const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+      const tombolAkunAtas = document.getElementById("tombol-akun-atas");
+
+      if (user) {
+        tombolAkunAtas.innerHTML = `
+          <span class="halo-user">Halo, ${user.nama}</span>
+          <a href="akun.html" class="btn-akun">Edit Profil</a>
+          <a href="#" class="btn-akun" onclick="logout()">Logout</a>
+        `;
+      } else {
+        alert("Silakan login terlebih dahulu.");
+        window.location.href = "login.html";
+      }
+
+      function logout() {
+        localStorage.removeItem("user");
+        alert("Logout berhasil!");
+        window.location.href = "index.html";
+      }
+
+      // Isi form dengan data user
+      document.getElementById("nama").value = user?.nama || "";
+      document.getElementById("email").value = user?.email || "";
+      document.getElementById("alamat").value = user?.alamat || "";
+      document.getElementById("telp").value = user?.telp || "";
+
+      // Tampilkan ringkasan pesanan
+      const ringkasan = document.getElementById("ringkasan-pesanan");
+      let total = 0;
+      keranjang.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.nama} - Rp${item.harga.toLocaleString()}`;
+        ringkasan.appendChild(li);
+        total += item.harga;
+      });
+      const totalLi = document.createElement("li");
+      totalLi.innerHTML = `<strong>Total: Rp${total.toLocaleString()}</strong>`;
+      ringkasan.appendChild(totalLi);
+
+      // Simpan pesanan
+      document.getElementById("form-checkout").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const pesanan = {
+          nama: document.getElementById("nama").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          alamat: document.getElementById("alamat").value.trim(),
+          telp: document.getElementById("telp").value.trim(),
+          metode: document.getElementById("metode").value,
+          items: keranjang,
+          total,
+          waktu: new Date().toLocaleString()
+        };
+
+        const semuaPesanan = JSON.parse(localStorage.getItem("riwayatPesanan")) || [];
+        semuaPesanan.push(pesanan);
+        localStorage.setItem("riwayatPesanan", JSON.stringify(semuaPesanan));
+        localStorage.removeItem("keranjang");
+        alert("Pesanan berhasil disimpan! Terima kasih telah belanja di EcoShop 💚");
+        window.location.href = "index.html";
+      });
+    </script>
+  </div>
+</body>
+</html>
